@@ -34,6 +34,7 @@ def command_parser(command):
         return tuple([command]) + tuple(args)
     else:
         return tuple([command])
+
 # loads image or sound
 def load():
     option = requestString("Do you want to load an image or audio?")
