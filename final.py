@@ -41,7 +41,7 @@ def load():
     if option == "image":
         pic = makePicture(pickAFile())
         return pic
-    else if option == "audio":
+    elif option == "audio":
         s = makeSound(pickAFile())
         return s
     else:
@@ -98,7 +98,7 @@ def betterBnW(pic):
   return(pic)
 
 #changes picture to a line drawing
-def lineDrawing(pic)
+def lineDrawing(pic):
   pix = getPixels(pic)
   pic = betterBnW(pic)
   for x in range(0, getWidth(pic)):
@@ -190,3 +190,4 @@ while true:
         commands[command[0]]['function'](*command[1:])
 
 printNow('Thanks for using the Media Manipulator')
+                                          
