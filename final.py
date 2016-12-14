@@ -4,6 +4,10 @@
 #Ahdia
 #Lyndsay
 
+loaded_files = {
+  'image': '',
+  'audio': '',
+}
 
 # Uses the commands dictionary to print out all the commands and their documentation
 def help_message():
@@ -39,16 +43,15 @@ def command_parser(command):
 def load():
     option = requestString("Do you want to load an image or audio?")
     if option == "image":
-        pic = makePicture(pickAFile())
-        return pic
+        loaded_files['image'] = makePicture(pickAFile())
     elif option == "audio":
-        sound = makeSound(pickAFile())
-        return sound
+        loaded_files['audio'] = makeSound(pickAFile())
     else:
         option = requestString("Invalid input. Do you want to load an image or audio?")
 
 #changes picture to artsy
-def artify(pic):
+def artify():
+  pic = loaded_files['image']
   mypic = makeEmptyPicture(getWidth(pic), getHeight(pic))
   for x in range(0, getWidth(mypic)):
     for y in range(0, getHeight(mypic)):
@@ -84,8 +87,8 @@ def artify(pic):
   show(mypic)
   
 # only for sepia and lineDrawing, not an actual option
-def betterBnW(pic):
-  pixels = getPixels(pic)
+def betterBnW():
+  pixels = getPixels(loaded_files['image'])
   for p in pixels:
     r = getRed(p)
     b = getBlue(p)
@@ -94,13 +97,12 @@ def betterBnW(pic):
     setRed(p, average)
     setBlue(p, average)
     setGreen(p, average)
-  repaint(pic)
-  return(pic)
+  repaint(loaded_files['image'])
+  show(loaded_files['image'])
 
 #changes picture to a line drawing
-def lineDrawing(pic):
-  pix = getPixels(pic)
-  pic = betterBnW(pic)
+def lineDrawing():
+  pic = betterBnW()
   for x in range(0, getWidth(pic)):
     for y in range(0, getHeight(pic)):
       if x + 1 < getWidth(pic) and y + 1 < getHeight(pic):
@@ -123,14 +125,15 @@ def lineDrawing(pic):
         setBlue(p, 255)
         setGreen(p, 255)
   repaint(pic)
+  show(pic)
 
 #makes picture sepia
-def sepia(pic):
-  bnwpic = betterBnW(pic)
-  mypic = makeEmptyPicture(getWidth(bnwpic), getHeight(bnwpic))
+def sepia():
+  betterBnW()
+  mypic = makeEmptyPicture(getWidth(loaded_files['image']), getHeight(loaded_files['image']))
   for x in range(0, getWidth(mypic)):
     for y in range(0, getHeight(mypic)):
-      p = getPixel(bnwpic, x, y)
+      p = getPixel(loaded_files['image'], x, y)
       r = getRed(p)
       b = getBlue(p)
       g = getGreen(p)
@@ -141,11 +144,12 @@ def sepia(pic):
         setColor(pn, makeColor(r*1.16,g,b*0.84))  
       else:
         setColor(pn, makeColor(min(r*1.08, 255), g, b*0.93))
+  repaint(mypic)
   show(mypic)
 
 #blends an amount of white with the picture
-def whiteBlend(pic):
-  pix = getPixels(pic)
+def whiteBlend():
+  pix = getPixels(loaded_files['image'])
   amount = requestNumber("How much white do you want to blend? Use decimals, ex: 20% = 0.20")
   for p in pix:
     newRed = 255*amount + getRed(p)*(1-amount)
@@ -153,31 +157,29 @@ def whiteBlend(pic):
     newBlue = 255*amount + getBlue(p)*(1-amount)
     c = makeColor(newRed, newGreen, newBlue)
     setColor(p, c)
-  show(pic)
+  repaint(loaded_files['image'])
+  show(loaded_files['image'])
 
-def increaseVolume(sound):
-  for sample in getSamples(sound):
+def increaseVolume():
+  for sample in getSamples(loaded_files['audio']):
     value = getSampleValue(sample)
     setSampleValue(sample, value * 2)
   play(sound)
-  return(sound)
 
-def decreaseVolume(sound):
-  for sample in getSamples(sound):
+def decreaseVolume():
+  for sample in getSamples(loaded_files['audio']):
     value = getSampleValue(sample)
     setSampleValue(sample, value * 0.5)
   play(sound)
-  return(sound)
 
-def goToEleven(sound):
-  for sample in getSamples(sound):
+def goToEleven():
+  for sample in getSamples(loaded_files['audio']):
     value = getSampleValue(sample)
     if (value > 0):
       setSampleValue(sample, 32767)
     if (value < 0):
       setSampleValue(sample, -32768)
   play(sound)
-  return(sound)
 
 ### All commands used here need to be defined before this line.
 ### Blah should be removed when we are done.
@@ -194,49 +196,44 @@ commands = {
         'expected_arguments': 0
     },
     'artify': {
-        'help_message': 'Temp!',
+        'help_message': 'Makes the image look drawn or arty.',
         'function': artify,
-        'expected_arguments': 1
+        'expected_arguments': 0
     },
     'bnw': {
-        'help_message': 'Temp',
+        'help_message': 'Makes the picture black and white.',
         'function': betterBnW,
-        'expected_arguments': 1
+        'expected_arguments': 0
     },
     'sepia': {
-        'help_message': 'Temp',
+        'help_message': 'Provides a sepia effect to the image.',
         'function': sepia,
-        'expected_arguments': 1
+        'expected_arguments': 0
     },
     'blend': {
-        'help_message': 'Temp',
+        'help_message': 'Blends a percentage of white into the image provided by the user.',
         'function': whiteBlend,
-        'expected_arguments': 1
+        'expected_arguments': 0
     },
      'increase': {
-        'help_message': 'Temp',
+        'help_message': 'Doubles the volume of the sound.',
         'function': increaseVolume,
-        'expected_arguments': 1
+        'expected_arguments': 0
     },
      'decrease': {
-        'help_message': 'Temp',
+        'help_message': 'Halves the volume of the sound',
         'function': decreaseVolume,
-        'expected_arguments': 1
+        'expected_arguments': 0
     },
      'eleven': {
-        'help_message': 'Temp',
+        'help_message': 'Cranks up the volume to maximum!',
         'function': goToEleven,
-        'expected_arguments': 1
+        'expected_arguments': 0
     },
     'exit': {
         'help_message': 'Exit this program immediately.',
         'function': sys.exit,
         'expected_arguments': 0
-    },
-    'blah': {
-        'help_message': 'Something something soemthing.',
-        'function': do_some_kind_thing,
-        'expected_arguments': 2
     }
 }
 
