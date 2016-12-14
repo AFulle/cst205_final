@@ -189,9 +189,7 @@ def goToEleven():
       setSampleValue(sample, -32768)
   play(loaded_files['audio'])
 
-### All commands used here need to be defined before this line.
-### Blah should be removed when we are done.
-### We need a load function of some sort to get the image or sound file.
+# All commands used here need to be defined before this line.
 commands = {
     'help': {
         'help_message': 'This will print out the help message',
