@@ -42,8 +42,8 @@ def load():
         pic = makePicture(pickAFile())
         return pic
     elif option == "audio":
-        s = makeSound(pickAFile())
-        return s
+        sound = makeSound(pickAFile())
+        return sound
     else:
         option = requestString("Invalid input. Do you want to load an image or audio?")
 
@@ -155,6 +155,30 @@ def whiteBlend(pic):
     setColor(p, c)
   show(pic)
 
+def increaseVolume(sound):
+  for sample in getSamples(sound):
+    value = getSampleValue(sample)
+    setSampleValue(sample, value * 2)
+  play(sound)
+  return(sound)
+
+def decreaseVolume(sound):
+  for sample in getSamples(sound):
+    value = getSampleValue(sample)
+    setSampleValue(sample, value * 0.5)
+  play(sound)
+  return(sound)
+
+def goToEleven(sound):
+  for sample in getSamples(sound):
+    value = getSampleValue(sample)
+    if (value > 0):
+      setSampleValue(sample, 32767)
+    if (value < 0):
+      setSampleValue(sample, -32768)
+  play(sound)
+  return(sound)
+
 ### All commands used here need to be defined before this line.
 ### Blah should be removed when we are done.
 ### We need a load function of some sort to get the image or sound file.
@@ -168,6 +192,41 @@ commands = {
         'help_message': 'This will let you select a image or audio file to load',
         'function': load,
         'expected_arguments': 0
+    },
+    'artify': {
+        'help_message': 'Temp!',
+        'function': artify,
+        'expected_arguments': 1
+    },
+    'bnw': {
+        'help_message': 'Temp',
+        'function': betterBnW,
+        'expected_arguments': 1
+    },
+    'sepia': {
+        'help_message': 'Temp',
+        'function': sepia,
+        'expected_arguments': 1
+    },
+    'blend': {
+        'help_message': 'Temp',
+        'function': whiteBlend,
+        'expected_arguments': 1
+    },
+     'increase': {
+        'help_message': 'Temp',
+        'function': increaseSound,
+        'expected_arguments': 1
+    },
+     'decrease': {
+        'help_message': 'Temp',
+        'function': decreaseSound,
+        'expected_arguments': 1
+    },
+     'eleven': {
+        'help_message': 'Temp',
+        'function': goToEleven,
+        'expected_arguments': 1
     },
     'exit': {
         'help_message': 'Exit this program immediately.',
