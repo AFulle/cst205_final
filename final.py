@@ -172,13 +172,13 @@ def increaseVolume():
   for sample in getSamples(loaded_files['audio']):
     value = getSampleValue(sample)
     setSampleValue(sample, value * 2)
-  play(sound)
+  play(loaded_files['audio'])
 
 def decreaseVolume():
   for sample in getSamples(loaded_files['audio']):
     value = getSampleValue(sample)
     setSampleValue(sample, value * 0.5)
-  play(sound)
+  play(loaded_files['audio'])
 
 def goToEleven():
   for sample in getSamples(loaded_files['audio']):
@@ -187,7 +187,7 @@ def goToEleven():
       setSampleValue(sample, 32767)
     if (value < 0):
       setSampleValue(sample, -32768)
-  play(sound)
+  play(loaded_files['audio'])
 
 ### All commands used here need to be defined before this line.
 ### Blah should be removed when we are done.
@@ -278,4 +278,4 @@ while true:
         commands[command[0]]['function'](*command[1:])
 
 printNow('Thanks for using the Media Manipulator')
-                                          
+                                                                                          
