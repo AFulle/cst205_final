@@ -153,7 +153,8 @@ def whiteBlend(pic):
     newBlue = 255*amount + getBlue(p)*(1-amount)
     c = makeColor(newRed, newGreen, newBlue)
     setColor(p, c)
-  show(pic)    
+  show(pic)
+
 ### All commands used here need to be defined before this line.
 ### Blah should be removed when we are done.
 ### We need a load function of some sort to get the image or sound file.
@@ -161,6 +162,11 @@ commands = {
     'help': {
         'help_message': 'This will print out the help message',
         'function': help_message,
+        'expected_arguments': 0
+    },
+    'load': {
+        'help_message': 'This will let you select a image or audio file to load',
+        'function': load,
         'expected_arguments': 0
     },
     'exit': {
