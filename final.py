@@ -215,12 +215,12 @@ commands = {
     },
      'increase': {
         'help_message': 'Temp',
-        'function': increaseSound,
+        'function': increaseVolume,
         'expected_arguments': 1
     },
      'decrease': {
         'help_message': 'Temp',
-        'function': decreaseSound,
+        'function': decreaseVolume,
         'expected_arguments': 1
     },
      'eleven': {
