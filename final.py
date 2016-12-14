@@ -47,47 +47,58 @@ def load():
     elif option == "audio":
         loaded_files['audio'] = makeSound(pickAFile())
     else:
-        option = requestString("Invalid input. Do you want to load an image or audio?")
+        option = requestString("Invalid input. Try again.")
+        
+        
+def save():
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    option = requestString("Do you want to save an image or audio?")
+    if option == "image":
+        writePictureTo(loaded_files['image'], current_dir + "/output_image.png")
+        showInformation("Successfully saved image to " + current_dir + "/output_image.png")
+    elif option == "audio":
+        writePictureTo(loaded_files['audio'], current_dir + "/output_audio.wav")
+        showInformation("Successfully saved audio to " + current_dir + "/output_audio.wav")
+    else:
+        showInformation("Invalid input. Try again.")
 
 #changes picture to artsy
 def artify():
-  pic = loaded_files['image']
-  mypic = makeEmptyPicture(getWidth(pic), getHeight(pic))
+  mypic = loaded_files['image']
   for x in range(0, getWidth(mypic)):
     for y in range(0, getHeight(mypic)):
-      p = getPixel(pic, x, y)
+      p = getPixel(mypic, x, y)
       r = getRed(p)
       b = getBlue(p)
       g = getGreen(p)
-      pn = getPixel(mypic, x, y)
       if r < 63:
-        setRed(pn, 31)
+        setRed(p, 31)
       elif r > 62 and r < 128:
-        setRed(pn, 95)
+        setRed(p, 95)
       elif r > 127 and r < 192:
-        setRed(pn, 159)
+        setRed(p, 159)
       else:
-        setRed(pn, 223)
+        setRed(p, 223)
       if g < 63:
-        setGreen(pn, 31)
+        setGreen(p, 31)
       elif g > 62 and g < 128:
-        setGreen(pn, 95)
+        setGreen(p, 95)
       elif g > 127 and g < 192:
-        setGreen(pn, 159)
+        setGreen(p, 159)
       else:
-        setGreen(pn, 223)
+        setGreen(p, 223)
       if b < 63:
-        setBlue(pn, 31)
+        setBlue(p, 31)
       elif b > 62 and b < 128:
-        setBlue(pn, 95)
+        setBlue(p, 95)
       elif b > 127 and b < 192:
-        setBlue(pn, 159)
+        setBlue(p, 159)
       else:
-        setBlue(pn, 223)
-  show(mypic)
+        setBlue(p, 223)
+  repaint(mypic)
   
 # only for sepia and lineDrawing, not an actual option
-def betterBnW():
+def betterBnW(showPreview=True):
   pixels = getPixels(loaded_files['image'])
   for p in pixels:
     r = getRed(p)
@@ -97,12 +108,13 @@ def betterBnW():
     setRed(p, average)
     setBlue(p, average)
     setGreen(p, average)
-  repaint(loaded_files['image'])
-  show(loaded_files['image'])
-
+  if showPreview:
+    repaint(loaded_files['image'])
+    
 #changes picture to a line drawing
 def lineDrawing():
-  pic = betterBnW()
+  betterBnW(False)
+  pic = loaded_files['image']
   for x in range(0, getWidth(pic)):
     for y in range(0, getHeight(pic)):
       if x + 1 < getWidth(pic) and y + 1 < getHeight(pic):
@@ -125,27 +137,24 @@ def lineDrawing():
         setBlue(p, 255)
         setGreen(p, 255)
   repaint(pic)
-  show(pic)
 
 #makes picture sepia
 def sepia():
-  betterBnW()
-  mypic = makeEmptyPicture(getWidth(loaded_files['image']), getHeight(loaded_files['image']))
+  betterBnW(False)
+  mypic = loaded_files['image']
   for x in range(0, getWidth(mypic)):
     for y in range(0, getHeight(mypic)):
-      p = getPixel(loaded_files['image'], x, y)
+      p = getPixel(mypic, x, y)
       r = getRed(p)
       b = getBlue(p)
       g = getGreen(p)
-      pn = getPixel(mypic, x, y)
       if r < 63:
-        setColor(pn, makeColor(r*1.1,g,b*0.9))
+        setColor(p, makeColor(r*1.1,g,b*0.9))
       elif r > 62 and r < 192:
-        setColor(pn, makeColor(r*1.16,g,b*0.84))  
+        setColor(p, makeColor(r*1.16,g,b*0.84))  
       else:
-        setColor(pn, makeColor(min(r*1.08, 255), g, b*0.93))
+        setColor(p, makeColor(min(r*1.08, 255), g, b*0.93))
   repaint(mypic)
-  show(mypic)
 
 #blends an amount of white with the picture
 def whiteBlend():
@@ -158,7 +167,6 @@ def whiteBlend():
     c = makeColor(newRed, newGreen, newBlue)
     setColor(p, c)
   repaint(loaded_files['image'])
-  show(loaded_files['image'])
 
 def increaseVolume():
   for sample in getSamples(loaded_files['audio']):
@@ -230,6 +238,11 @@ commands = {
         'function': goToEleven,
         'expected_arguments': 0
     },
+    'save': {
+        'help_message': 'Saves the image or sound to a file.',
+        'function': save,
+        'expected_arguments': 0
+    },
     'exit': {
         'help_message': 'Exit this program immediately.',
         'function': sys.exit,
@@ -237,7 +250,20 @@ commands = {
     }
 }
 
-#Testing
+# Main code
+showInformation("""Welcome to the Bitspice Media Manipulator!
+Using this tool you can manipulate images and sounds with the predefined commands.
+
+If you need a list of commands, please type 'help'.
+If the command expects arguments, make sure to include them in the command when you use it.
+
+You need to use the 'load' command first to load your appropriate file to manipulate.
+The commands won't work without a file loaded.
+
+If you need to restart, or clear out your changes, use the load command and reload the file.
+Changes should be cummulative.
+""")
+
 while true:
     user_input = requestString("enter command")
     command = command_parser(user_input)
